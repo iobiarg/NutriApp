@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NutriApp</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <h1>NutriApp</h1>
+        <p>Registro diario, recetas propias y memoria nutricional.</p>
+      </header>
+
+      <nav class="tabs">
+        <button class="tab active" data-section="diario">1) Registro diario</button>
+        <button class="tab" data-section="recetas">2) Recetas propias</button>
+        <button class="tab" data-section="carga">3) Cargar valores nutricionales</button>
+      </nav>
+
+      <section id="diario" class="panel active">
+        <h2>Registro de comidas diarias</h2>
+
+        <form id="meal-form" class="card form-grid">
+          <label>
+            Tipo de comida
+            <select id="meal-type" required>
+              <option value="desayuno">Desayuno</option>
+              <option value="almuerzo">Almuerzo</option>
+              <option value="merienda">Merienda</option>
+              <option value="cena">Cena</option>
+              <option value="picoteo">Picoteo</option>
+            </select>
+          </label>
+
+          <label>
+            Alimento
+            <input id="food-name" placeholder="Ej: Yogur natural" required />
+          </label>
+
+          <label>
+            Cantidad
+            <input id="food-amount" type="number" min="0" step="0.01" value="100" required />
+          </label>
+
+          <label>
+            Unidad
+            <select id="food-unit">
+              <option value="gramos">gramos</option>
+              <option value="unidad">unidad</option>
+            </select>
+          </label>
+
+          <label>
+            Gramos por unidad (si aplica)
+            <input id="grams-per-unit" type="number" min="0" step="0.01" value="100" />
+          </label>
+
+          <button type="submit" class="primary">Agregar alimento</button>
+        </form>
+
+        <div class="card">
+          <h3>Comidas cargadas hoy</h3>
+          <ul id="meal-list" class="list"></ul>
+          <div id="totals" class="totals"></div>
+          <div class="actions">
+            <button id="close-day" class="primary">Cerrar día</button>
+            <button id="refresh-totals">Recalcular totales</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Historial diario</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Día / fecha</th>
+                <th>Calorías</th>
+                <th>Proteínas</th>
+                <th>Grasas</th>
+                <th>Carbohidratos</th>
+                <th>Fibra</th>
+                <th>Carbohidratos netos</th>
+              </tr>
+            </thead>
+            <tbody id="history-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="recetas" class="panel">
+        <h2>Recetas propias</h2>
+        <form id="recipe-form" class="card">
+          <label>
+            Nombre de receta
+            <input id="recipe-name" required />
+          </label>
+          <label>
+            Peso final de producto (g)
+            <input id="recipe-final-weight" type="number" min="1" value="100" required />
+          </label>
+
+          <div id="recipe-ingredients"></div>
+          <button type="button" id="add-ingredient">+ Ingrediente</button>
+          <button type="submit" class="primary">Guardar receta</button>
+          <div id="recipe-result"></div>
+        </form>
+
+        <div class="card">
+          <h3>Recetas guardadas</h3>
+          <ul id="recipe-list" class="list"></ul>
+        </div>
+      </section>
+
+      <section id="carga" class="panel">
+        <h2>Cargar valores nutricionales</h2>
+        <form id="manual-nutrition-form" class="card form-grid">
+          <label>
+            Nombre del alimento
+            <input id="manual-food-name" required />
+          </label>
+          <label>
+            Fuente / referencia
+            <input id="manual-source" placeholder="Marca o web oficial" required />
+          </label>
+          <label class="full">
+            Valores (texto libre; por 100g)
+            <textarea id="manual-text" rows="5" placeholder="Ej: Calorías 240 kcal, proteínas 8g, grasas 10g, carbohidratos 30g, fibra 3g"></textarea>
+          </label>
+          <button type="submit" class="primary">Cargar desde texto</button>
+        </form>
+
+        <form id="photo-nutrition-form" class="card">
+          <h3>Cargar por foto de etiqueta</h3>
+          <label>
+            Nombre del alimento
+            <input id="photo-food-name" required />
+          </label>
+          <label>
+            Fuente
+            <input id="photo-source" placeholder="Marca / packaging" required />
+          </label>
+          <input id="photo-input" type="file" accept="image/*" required />
+          <button type="submit" class="primary">Analizar foto</button>
+          <pre id="ocr-output"></pre>
+        </form>
+
+        <div class="card">
+          <h3>Memoria de alimentos</h3>
+          <ul id="food-memory" class="list"></ul>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
